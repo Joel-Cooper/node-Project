@@ -36,7 +36,7 @@ jobs:
       - name: Run tests
         run: npm test
         env:
-          MONGODB_URI: mongodb://localhost:27017/whispering-database
+          MONGODB_URI: mongosh "mongodb+srv://nodejs-project.b2f6g.mongodb.net/" --apiVersion 1 --username joelcooper02 --password 85jwYd9GPiG4EF5G
           PORT: 3000
           SALT_ROUNDS: 10
           JWT_SECRET: ${{ steps.generate-secret.outputs.JWT_SECRET }}
