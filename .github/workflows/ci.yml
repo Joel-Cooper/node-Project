@@ -4,17 +4,32 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the code
       - uses: actions/checkout@v3
+
+      # Set up Docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      # Install dependencies
       - name: Install dependencies
         run: npm install
+
+      # Check code style
       - name: Check code style
         run: npm run lint
+
+      # Generate a random JWT secret
       - name: Generate a random JWT secret
         id: generate-secret
         run: echo "::set-output name=JWT_SECRET::$(openssl rand -base64 30)"
         shell: bash
-      - name: Prepare environment
-        run: npm run infra:start
+
+      # Start Docker Compose
+      - name: Start Docker Compose
+        run: docker-compose up -d --build
+
+      # Run tests
       - name: Run tests
         run: npm test
         env:
