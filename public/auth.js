@@ -1,83 +1,76 @@
-const locationPath = window.location.pathname;
-let accessToken = localStorage.getItem('accessToken');
+const locationPath = window.location.pathname
+let accessToken = localStorage.getItem('accessToken')
 
-if (accessToken) {
-    localStorage.removeItem('accessToken');
-    accessToken = null;
+if(accessToken) {
+    localStorage.removeItem('accessToken')
+    accessToken = null
 }
 
-if (locationPath === '/login') {
+if(locationPath === '/login'){
     const login = document.getElementById('login');
     login.addEventListener('submit', (event) => {
         event.preventDefault();
         const username = event.target.username.value;
         const password = event.target.password.value;
-
+    
         fetch('/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 username,
-                password,
-            }),
+                password
+            })
         })
-        .then((response) => {
-            if (!response.ok) {  // Checks for any 2xx status code
-                throw new Error("Invalid credentials");
+        .then(response => {
+            if(response.status !== 200) {
+                throw new Error("Invalid credentials")
             }
-            return response.json();
+            return response.json()
         })
-        .then(({ accessToken }) => {
-            if (accessToken) {
-                localStorage.setItem('accessToken', accessToken);
-                window.location.href = '/';
-            } else {
-                throw new Error("Access token not received");
-            }
+        .then(({accessToken}) => {
+            localStorage.setItem('accessToken', accessToken);
+            window.location.href = '/';
         })
-        .catch((error) => {
-            alert(error.message);  // Show the specific error message
-        });
+        .catch(error => {
+            alert(error);
+        })
     });
 }
 
-if (locationPath === '/signup') {
-    const signupForm = document.getElementById('signup');  // Make sure the id matches your form
-    signupForm.addEventListener('submit', (event) => {
+if(locationPath === '/signup'){
+    const sigupForm = document.getElementById('sigup');
+    sigupForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const username = event.target.username.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
-
+    
         fetch('/signup', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 username,
                 email,
-                password,
-            }),
+                password
+            })
         })
-        .then((response) => {
-            if (!response.ok) {  // Checks for any 2xx status code
-                throw new Error("Error while registering the user");
+        .then(response => {
+            if(response.status !== 200) {
+                throw new Error("Error while registering the user")
             }
-            return response.json();
+            return response.json()
         })
-        .then(({ accessToken }) => {
-            if (accessToken) {
-                localStorage.setItem('accessToken', accessToken);
-                window.location.href = '/';
-            } else {
-                throw new Error("Access token not received");
-            }
+        .then(({accessToken}) => {
+            localStorage.setItem('accessToken', accessToken);
+            window.location.href = '/';
         })
-        .catch((error) => {
-            alert(error.message);  // Show the specific error message
-        });
+        .catch(error => {
+            alert(error);
+        })
     });
+
 }
